@@ -11,9 +11,9 @@ import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import lombok.Data;
 
-@Data
+//@Data
 @Entity
-@Table(name = "categorias")
+@Table(name = "categoria")
 public class Categoria implements Serializable{
     private static final long serialVersionUID = 1L;
     
@@ -33,4 +33,37 @@ public class Categoria implements Serializable{
     
     @Column(name = "activo")
     private Boolean activo;
+
+    public Integer getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(Integer idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+    
 }
