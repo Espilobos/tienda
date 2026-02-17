@@ -17,7 +17,7 @@ public class Producto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_producto")
     private Integer idProducto;
-    private Integer idCategoria;
+//    private Integer idCategoria;
 
     @Column(nullable = false, length = 50)
     @NotBlank(message = "La descripción no puede estar vacía.")
@@ -39,7 +39,11 @@ public class Producto implements Serializable {
     @Column(name = "ruta_imagen", length = 1024)
     private String rutaImagen;
     private boolean activo;
-
+    
+    @ManyToOne
+    @JoinColumn(name = "id_categoria")
+    private Categoria categoria;
+    
     public Integer getIdProducto() {
         return idProducto;
     }
@@ -48,13 +52,13 @@ public class Producto implements Serializable {
         this.idProducto = idProducto;
     }
 
-    public Integer getIdCategoria() {
-        return idCategoria;
-    }
-
-    public void setIdCategoria(Integer idCategoria) {
-        this.idCategoria = idCategoria;
-    }
+//    public Integer getIdCategoria() {
+//        return idCategoria;
+//    }
+//
+//    public void setIdCategoria(Integer idCategoria) {
+//        this.idCategoria = idCategoria;
+//    }
 
     public String getDescripcion() {
         return descripcion;
