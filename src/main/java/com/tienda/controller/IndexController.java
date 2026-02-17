@@ -29,20 +29,20 @@ public class IndexController {
         return "/index";
     }
     
-//    @GetMapping("/consultas/{idCategoria}")
-//    public String listado(@PathVariable("idCategoria") Integer idCategoria, Model model) {
-//        model.addAttribute("idCategoriaActual", idCategoria);
-//        var categoriaOptional = categoriaService.getCategoria(idCategoria);
-//        if (categoriaOptional.isEmpty()) {
-//            //Puede ser que no se exista la categoria buscada...
-//            model.addAttribute("productos", java.util.Collections.emptyList());
-//        } else {
-//            var categoria = categoriaOptional.get();
-//            var productos = categoria.getProductos();
-//            model.addAttribute("productos", productos);
-//        }
-//        var categorias = categoriaService.getCategorias(true);
-//        model.addAttribute("categorias", categorias);
-//        return "/index";
-//    }
+    @GetMapping("/consultas/{idCategoria}")
+    public String listado(@PathVariable("idCategoria") Integer idCategoria, Model model) {
+        model.addAttribute("idCategoriaActual", idCategoria);
+        var categoriaOptional = categoriaService.getCategoria(idCategoria);
+        if (categoriaOptional.isEmpty()) {
+            //Puede ser que no se exista la categoria buscada...
+            model.addAttribute("productos", java.util.Collections.emptyList());
+        } else {
+            var categoria = categoriaOptional.get();
+            var productos = categoria.getProductos();
+            model.addAttribute("productos", productos);
+        }
+        var categorias = categoriaService.getCategorias(true);
+        model.addAttribute("categorias", categorias);
+        return "/index";
+    }
 }

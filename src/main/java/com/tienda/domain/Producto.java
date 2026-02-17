@@ -52,13 +52,13 @@ public class Producto implements Serializable {
         this.idProducto = idProducto;
     }
 
-//    public Integer getIdCategoria() {
-//        return idCategoria;
-//    }
-//
-//    public void setIdCategoria(Integer idCategoria) {
-//        this.idCategoria = idCategoria;
-//    }
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
 
     public String getDescripcion() {
         return descripcion;

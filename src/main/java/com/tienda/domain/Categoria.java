@@ -39,6 +39,14 @@ public class Categoria implements Serializable{
     @OneToMany(mappedBy = "categoria")
     private List<Producto> productos;
 
+    public List<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
+    }
+    
     public Integer getIdCategoria() {
         return idCategoria;
     }
