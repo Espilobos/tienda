@@ -1,10 +1,15 @@
 package com.tienda;
 
+import com.tienda.service.RutaService;
+import com.tienda.domain.Ruta;
 import java.util.Locale;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -98,8 +103,30 @@ public class ProjectConfig implements WebMvcConfigurer {
         "/facturar/carrito"
     };
 
+    @Autowired
+    public void configurerGlobal(AuthenticationManagerBuilder build,
+            @Lazy PasswordEncoder passwordEncoder,
+            @Lazy UserDetailsService userDetailsService) throws Exception {
+        build.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+    }
+    
+    @Autowired
+    private RutaService rutaService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        var rutas = rutaService.getRutas();
+        
+        http.authorizeHttpRequests(requests -> {
+            for (Ruta ruta : rutas) {
+                if (ruta.isRequiereRol()) {
+                    requests.requestMatchers(ruta.getRuta()).hasRole(ruta.getRol().getRol());
+                } else {
+                    requests.requestMatchers(ruta.getRuta()).permitAll();
+                }
+            }
+            requests.anyRequest().authenticated();
+        });
         http.authorizeHttpRequests(request -> request
                 .requestMatchers(PUBLIC_URLS).permitAll()
                 .requestMatchers(ADMIN_URLS).hasRole("ADMIN")
@@ -131,33 +158,30 @@ public class ProjectConfig implements WebMvcConfigurer {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    //Este método será reemplazado la siguiente semana
-    @Bean
-    public UserDetailsService users(PasswordEncoder passwordEncoder) {
-        UserDetails admin = User.builder()
-                .username("juan")
-                .password(passwordEncoder.encode("123"))
-                .roles("ADMIN")
-                .build();
-
-        UserDetails sales = User.builder()
-                .username("rebeca")
-                .password(passwordEncoder.encode("456"))
-                .roles("VENDEDOR")
-                .build();
-
-        UserDetails user = User.builder()
-                .username("pedro")
-                .password(passwordEncoder.encode("789"))
-                .roles("USUARIO") // Consistent con tu configuración
-                .build();
-
-        return new InMemoryUserDetailsManager(admin, sales, user);
-    }
-
+    
 }
-
-
-
-
+//
+//    //Este método será reemplazado la siguiente semana
+//    @Bean
+//    public UserDetailsService users(PasswordEncoder passwordEncoder) {
+//        UserDetails admin = User.builder()
+//                .username("juan")
+//                .password(passwordEncoder.encode("123"))
+//                .roles("ADMIN")
+//                .build();
+//
+//        UserDetails sales = User.builder()
+//                .username("rebeca")
+//                .password(passwordEncoder.encode("456"))
+//                .roles("VENDEDOR")
+//                .build();
+//
+//        UserDetails user = User.builder()
+//                .username("pedro")
+//                .password(passwordEncoder.encode("789"))
+//                .roles("USUARIO") // Consistent con tu configuración
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(admin, sales, user);
+//    }
+//}
